@@ -40,22 +40,23 @@ export class LoginUseCase {
     const { email, password } = credentials;
     const user: any = await this.validateUser(email, password);
     if (!user) throw new NotFoundException("Email or Password incorrect.");
-
+    
     const twoFactorCode = this.generateTwoFactorCode();
     const expirationTime = new Date();
     expirationTime.setMinutes(expirationTime.getMinutes() + 10); // 10 minutes
-
+    
     user.twoFactorCode = twoFactorCode;
     user.twoFactorExpiration = expirationTime;
     await this.dataServices.users.update(user.id, {
       ...user,
     });
-
+    
     await this.mailerService.sendEmail(
       user.email,
       "Two-Factor Authentication Code",
       twoFACodeTemplate(twoFactorCode),
     );
+    console.log("Mchet!!!");
 
     return "2FA code sent to email.";
   }
@@ -63,7 +64,7 @@ export class LoginUseCase {
   async verifyTwoFactorCode(
     twoFactorInput: TwoFactorDto,
   ): Promise<LoginResponseDto> {
-    const user: any = await this.dataServices.users.findByAttribute(
+    const user:any= await this.dataServices.users.findByAttribute(
       "email",
       twoFactorInput.email,
     );

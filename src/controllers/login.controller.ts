@@ -19,6 +19,8 @@ export class LoginController {
   @Post("login")
   async login(@Body() credentials: LoginRequestDto): Promise<string> {
     const loginResponse = await this.loginUseCase.login(credentials);
+    //Fixing the login
+    console.log("working!!!");
     return loginResponse;
   }
 
@@ -54,5 +56,5 @@ export class LoginController {
   @Get("loadMe")
   async loadMeEndpoint(@CurrentUser() user: any): Promise<User> {
     return await this.loginUseCase.loadUserDetails(user.userId);
-  }
+  } 
 }

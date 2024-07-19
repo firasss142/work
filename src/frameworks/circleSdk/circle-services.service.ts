@@ -21,7 +21,6 @@ export class CircleService {
   }
   async createDevelopWallet(userData: Partial<User>) {
     const entity = await firstValueFrom(this.getEntity());
-    console.log("woking jawk behii");
     const cyph = this.generateEntitySecretCiphertext(
       entity["data"]["publicKey"],
     );
@@ -45,7 +44,7 @@ export class CircleService {
         idempotencyKey: walletUuid, // Should be a unique string for each request
         accountType: "EOA",
         blockchains: ["ETH-SEPOLIA", "MATIC-AMOY"],
-        metadata: [{ name: userData.firstName + "wallet" }],
+        metadata: [{ name: userData.firstName + " wallet" }],
         walletSetId: walletSet["data"]["walletSet"]["id"],
         entitySecretCiphertext: newCyph,
         count: 1,

@@ -23,7 +23,7 @@ export class MailerService extends AbstractMailerService {
         user: MAILER_USER,
         pass: MAILER_PASSWORD,
       },
-      secure: true,
+      secure: false,
       // tls: {
       //   ciphers: "SSLv3",
       // },

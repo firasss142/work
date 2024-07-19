@@ -137,14 +137,11 @@ import {
         const circleWalletResponse: WalletsResponse = await firstValueFrom(
           await this.circleservice.createDevelopWallet(createUserDto),
         );
-        //Circle API's not working 
-        console.log("working till now");
-        //Circle API's not working 
         
         console.log("circleWalletResponse", circleWalletResponse.data);
-  
+        
         const userWallet: Wallet[] = circleWalletResponse.data.wallets;
-  
+        
         const newUser = this.userFactoryService.createNewUser({
           ...createUserDto,
           wallets: userWallet,
