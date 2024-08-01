@@ -16,6 +16,7 @@ export class UserFactoryService {
     newUser.phoneNumber = createUserDto.phoneNumber;
     newUser.avatar = createUserDto.avatar;
     newUser.wallets = createUserDto.wallets;
+    newUser.nfts = createUserDto.nfts;
     return newUser;
   }
 
@@ -29,7 +30,6 @@ export class UserFactoryService {
     updatedUser.phoneNumber = updateUserDto.phoneNumber;
     updatedUser.avatar = updateUserDto.avatar;
     updatedUser.updatedAt = new Date();
-
     return updatedUser;
   }
 }

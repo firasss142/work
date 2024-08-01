@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Role } from "../../../../core/roles/role.enum";
 
 export type UserDocument = User & Document;
-
+//User Wallet
 export interface Wallet {
   id: string;
   state: string;
@@ -17,7 +17,16 @@ export interface Wallet {
   createDate: string;
 }
 
-
+//User Nft 
+export interface NFT{ 
+nftTokenId : number,
+token : {
+  id: string,
+  blockchain : string,
+  tokenAddress :string,
+  name : string
+}
+} 
 @Schema()
 export class User {
   @Prop({required: true})
@@ -67,6 +76,9 @@ export class User {
 
   @Prop()
   wallets : Wallet[];
+
+  @Prop()
+  nfts : NFT[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

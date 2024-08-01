@@ -1,10 +1,11 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable, HttpException } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { v4 as uuidv4 } from "uuid";
 import * as forge from "node-forge";
 import { catchError, map } from "rxjs/operators";
 import { firstValueFrom } from "rxjs";
 import { User } from "src/core";
+import { response } from "express";
 //import { Asset } from "../data-services/mongo/model";
 
 @Injectable()
@@ -246,7 +247,7 @@ export class CircleService {
     const walletUuid = uuidv4();
     const body = {
       idempotencyKey: walletUuid, // Should be a unique string for each request
-      accountType: "EOA",
+      accountType: "EOA",  
       blockchains: ["ETH-SEPOLIA", "MATIC-AMOY"],
       metadata: [{ name: userName + "wallet", refId: userId }], // Adjust according to your needs
     };
@@ -266,51 +267,57 @@ export class CircleService {
         }),
       );
   }
-
+  
   async executeContract(
     abiParameters: string[],
     walletId: string,
   ): Promise<any> {
-    const entity = await firstValueFrom(this.getEntity());
-    const cyph = this.generateEntitySecretCiphertext(
-      entity["data"]["publicKey"],
-    );
-    console.log(cyph);
-
-    const idempotencyKey = uuidv4();
-    const url = `${this.baseUrl}/developer/transactions/contractExecution`;
-
-    const data = {
-      abiFunctionSignature: "mintTo(address,string)",
-      abiParameters: abiParameters,
-      idempotencyKey: idempotencyKey,
-      contractAddress: "0xe6e79c0e988ca9def153d38736da33cb6c9b9b8d",
-      feeLevel: "HIGH",
-      walletId: walletId,
-      entitySecretCiphertext: cyph,
-    };
-
-    console.log(data);
-
-    return this.httpService
-      .post(url, data, {
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-          "Content-Type": "application/json",
-          accept: "application/json",
-        },
-      })
-      .pipe(
-        map((response) => {
-          console.log(response);
-          return response.data;
-        }),
-        catchError((e) => {
-          console.log("e", e);
-          throw new HttpException(e.response.data, e.response.status);
-        }),
+    try {
+      const entity = await firstValueFrom(this.getEntity());
+      const cyph = this.generateEntitySecretCiphertext(entity["data"]["publicKey"]);
+      console.log('Generated cypher:', cyph);
+  
+      const idempotencyKey = uuidv4();
+      const url = `${this.baseUrl}/developer/transactions/contractExecution`;
+  
+      const data = {
+        abiFunctionSignature: "mintTo(address,string)",
+        abiParameters: abiParameters,
+        idempotencyKey: idempotencyKey,
+        contractAddress: "0xfb6bda94804f767ad236234d2181f0037811721c",
+        feeLevel: "HIGH",
+        walletId: walletId,
+        entitySecretCiphertext: cyph,
+      };
+  
+      console.log('Request data:', data);
+  
+      const response = await firstValueFrom(
+        this.httpService.post(url, data, {
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+            "Content-Type": "application/json",
+            accept: "application/json",
+          },
+        }).pipe(
+          map((response) => {
+            console.log('API response:', response);
+            return response.data;
+          }),
+          catchError((e) => {
+            console.error('Error in HTTP request:', e);
+            throw new HttpException(e.response?.data || 'Unknown error', e.response?.status || 500);
+          })
+        )
       );
+  
+      return response;
+    } catch (error) {
+      console.error('Error in executeContract:', error);
+      throw new HttpException('Failed to execute contract', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
+  
 
   //  async  approve(
   //   abiParameters: string[],
@@ -352,4 +359,22 @@ export class CircleService {
   //     })
   //   );
   // }
+  getBalance (walletId : any){
+    const url =`${this.baseUrl}/wallets/${walletId}/balances`;
+    return this.httpService.get(url,{
+      headers: {
+        Authorization : `Bearer<${this.apiKey}>`,
+        "Content-Type": "application/json"
+      }
+    })
+    .pipe(
+      map((response) =>response.data),
+      catchError((e) => {
+        throw new HttpException(e.response.data, e.response.status);
+
+      })
+    )
+  }
 }
+
+

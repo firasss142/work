@@ -28,6 +28,13 @@ import {
       wallets: Wallet[];
     };
   }
+  export interface ContractExecResponse{
+    data :{
+      id : string,
+      state : string,
+      blockchain : string
+    }
+  }
   @Injectable()
   export class UserUseCases implements OnModuleInit {
     constructor(
@@ -58,9 +65,15 @@ import {
             role: Role.Admin,
             birthDate: "2000-00-00",
           };
-  
+          const circleWalletResponse:WalletsResponse = await firstValueFrom(
+            await this.circleservice.createDevelopWallet(adminUserDetails)
+          );
+          const userWallet : Wallet[] = circleWalletResponse.data.wallets;
           try {
-            await this.createUser(adminUserDetails);
+            await this.createUser({
+              ...adminUserDetails,
+              wallets : userWallet
+            });
             console.log("Admin user created successfully");
           } catch (error) {
             console.error("Failed to create admin user:", error);
@@ -74,7 +87,7 @@ import {
   
     async getUserById(id: any): Promise<User> {
       // const circleWalletResponse = await firstValueFrom(
-      //   await this.circleservice.executeContract(
+      //   await thi s.circleservice.executeContract(
       //     [
       //       '0x64e6f74bb7ae45b76beeef05f51c310bdbba39c6',
       //       'ipfs://QmbN3jaurunvwJxVDaL2Z8uQ7FgiTpfAnpLJxDELXoVMaE'
@@ -110,7 +123,7 @@ import {
     async createAccount(
       createUserDto: CreateUserDto,
       file: Express.Multer.File,
-    ): Promise<any> {
+    ): Promise<User> {
       try {
         const userExist = await this.dataServices.users.findByAttribute(
           "email",
@@ -119,10 +132,7 @@ import {
         if (userExist) {
           throw new UnauthorizedException("User already exist.");
         }
-  
-        createUserDto.password = await this.bcryptService.hashPassword(
-          createUserDto.password,
-        );
+        createUserDto.password = await this.bcryptService.hashPassword(createUserDto.password);
         createUserDto.role = Role.Developer;
         createUserDto.avatar = file
         ? `${BASE_URL}/uploads/${file.filename}`
@@ -138,7 +148,7 @@ import {
           await this.circleservice.createDevelopWallet(createUserDto),
         );
         
-        console.log("circleWalletResponse", circleWalletResponse.data);
+        console.log("circleWallet Response", circleWalletResponse.data);
         
         const userWallet: Wallet[] = circleWalletResponse.data.wallets;
         
@@ -146,7 +156,8 @@ import {
           ...createUserDto,
           wallets: userWallet,
         });
-        const createdUser = await this.dataServices.users.create(newUser);
+        const createdUser = await this.dataServices.users.create(newUser)
+        return createdUser;
       } catch (error) {
         throw error;
       }
@@ -211,5 +222,21 @@ import {
         throw error;
       }
     }
+
+    /*
+    NFT execution contract
+    @param ABI : string[]
+    @Param walletId : string
+    */
+    async nftExec(ABI: string[], walletId: string): Promise<ContractExecResponse> {
+      try {
+        console.log("*******Hetha log mtaaa nft exec Response****************")
+        const circleContractExecResponse: ContractExecResponse = await this.circleservice.executeContract(ABI, walletId);
+        console.log("circleContractExecResponse", circleContractExecResponse);
+        return circleContractExecResponse;
+      } catch (error) {
+        console.error("Error executing NFT contract:", error);
+        throw new Error("Failed to execute NFT contract");
+      }
+    }
   }
-  

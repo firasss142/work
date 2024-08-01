@@ -15,7 +15,7 @@ import {
     UpdateUserDto,
     UpdateUserPasswordDto,
   } from "../core/dtos";
-  import { UserUseCases } from "../use-cases/user/user.use-case";
+  import { ContractExecResponse, UserUseCases } from "../use-cases/user/user.use-case";
   import {
     ApiBody,
     ApiTags,
@@ -152,7 +152,23 @@ import {
     async usersStats(): Promise<number> {
       return this.userUseCases.usersStats();
     }
-  
-   
+    //Nft deployment controller
+
+@Post("deploy/nft")
+async nftExec(
+  @Body() body: { ABI: string[], walletId: string }
+): Promise<ContractExecResponse> {
+  try {
+    console.log("Received ABI:", body.ABI);
+    console.log("Received Wallet ID:", body.walletId);
+    const { ABI, walletId } = body;
+    const mintNft = await this.userUseCases.nftExec(ABI, walletId);
+    console.log("NFT Deployment Response:", mintNft);
+    return mintNft;
+  } catch (error) {
+    console.error("Error deploying NFT:", error.message);
+    throw new Error("Failed to deploy NFT");
   }
-  
+}
+
+  }

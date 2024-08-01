@@ -1,7 +1,8 @@
 import { IsString, IsNotEmpty, IsDate, IsJSON } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Role } from "../roles/role.enum";
-import {Wallet} from "src/frameworks/data-services/mongo/model"
+import {Wallet} from "src/frameworks/data-services/mongo/model";
+import {NFT} from "src/frameworks/data-services/mongo/model"
 export class CreateUserDto {
   @ApiProperty()
   @IsString()
@@ -19,7 +20,6 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty()
-  @IsString()
   @IsNotEmpty()
   password: string;
 
@@ -53,6 +53,8 @@ export class CreateUserDto {
   deletedAt: Date;
 
   wallets : Wallet[];
+
+  nfts : NFT[]
 }
 
 export class UpdateUserDto {

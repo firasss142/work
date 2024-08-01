@@ -1,5 +1,6 @@
 import {Role} from "../roles/role.enum";
-import {Wallet} from "src/frameworks/data-services/mongo/model"
+import {Wallet} from "src/frameworks/data-services/mongo/model";
+import {NFT} from "src/frameworks/data-services/mongo/model";
 export class User {
     firstName: string;
     lastName: string;
@@ -13,6 +14,7 @@ export class User {
     twoFactorCode: string;
     twoFactorExpiration: Date;
     wallets: Wallet[];
+    nfts : NFT[];
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date;

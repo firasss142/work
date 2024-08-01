@@ -19,8 +19,6 @@ export class LoginController {
   @Post("login")
   async login(@Body() credentials: LoginRequestDto): Promise<string> {
     const loginResponse = await this.loginUseCase.login(credentials);
-    //Fixing the login
-    console.log("working!!!");
     return loginResponse;
   }
 
