@@ -9,6 +9,7 @@ import {
     IDataServices,
     IBcryptService,
     ICircleService,
+    IEASService,
   } from "../../core/abstracts";
   import {
     CreateUserDto,
@@ -42,6 +43,7 @@ import {
       private userFactoryService: UserFactoryService,
       private bcryptService: IBcryptService,
       private circleservice: ICircleService,
+      private easService : IEASService,
     ) {}
     async onModuleInit(): Promise<void> {
       setTimeout(async () => {
@@ -237,6 +239,28 @@ import {
       } catch (error) {
         console.error("Error executing NFT contract:", error);
         throw new Error("Failed to execute NFT contract");
+      }
+    }
+
+    async createContractAttestation(threshold: number, paymentAmount: string):Promise<string>{
+      try{
+        const attestationContractResponse = await this.easService.createContractAttestation(threshold,paymentAmount);
+        console.log("Attestation Response : ",attestationContractResponse);
+        return attestationContractResponse;
+      }catch(error){
+        console.log("Error to create EAS Contract Attestation: ", error);
+        throw new Error("Faild to create EAS Contract Attestation");
+      }
+    }
+
+    async createDeveloperAttestation(attestationUID : string){
+      try{
+        const attestationDeveloperResponse = await this.easService.createDeveloperAttestation(attestationUID);
+        console.log("Attestation Response : ",attestationDeveloperResponse);
+        
+      }catch(error){
+        console.log("Error to create EAS Developer Attestation : ", error);
+        throw new Error("Faild to create EAS Developer Attestation");
       }
     }
   }

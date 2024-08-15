@@ -33,6 +33,7 @@ import {
   @ApiTags("api/user")
   @Controller("api/user")
   export class UserController {
+    attestationUID: string | null = null;  
     constructor(private userUseCases: UserUseCases) {}
   
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -170,5 +171,25 @@ async nftExec(
     throw new Error("Failed to deploy NFT");
   }
 }
-
+@Post('create-contract-attestation')
+  async createContractAttestation(
+    @Body('threshold') threshold: number,
+    @Body('paymentAmount') paymentAmount: string
+  ) {
+    const contractAttestationUid = await this.userUseCases.createContractAttestation(threshold, paymentAmount);
+    this.attestationUID=contractAttestationUid;
+    // Handle the contract attestation UID as needed (e.g., store it, return it)
+    return { contractAttestationUid };
   }
+
+  @Post('create-developer-attestation')
+  async createDeveloperAttestation() {
+    const contractAttestationUid = this.attestationUID;
+    if (!contractAttestationUid) {
+      throw new Error('Contract attestation UID not found');
+    }
+    const developerAttestationUid = await this.userUseCases.createDeveloperAttestation(contractAttestationUid);
+    // Handle the developer attestation UID as needed
+    return { developerAttestationUid };
+  }
+}

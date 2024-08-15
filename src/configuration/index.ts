@@ -18,4 +18,5 @@ export const FRONT_END_URL = process.env.FRONT_END_URL;
 export const PROVIDER = process.env.PROVIDER;
 export const SIGNER = process.env.SIGNER;
 export const EAS_CONTRACT_ADDRESS = process.env.EAS_CONTRACT_ADDRESS;
-export const SCHEMA_UID = process.env.SCHEMA_T_001_UID;
+export const CONTRACT_SCHEMA_UID = process.env.CONTRACT_SCHEMA_UID;
+export const DEVELOPER_SCHEMA_UID = process.env.DEVELOPER_SCHEMA_UID;
