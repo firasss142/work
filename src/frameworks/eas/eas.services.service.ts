@@ -89,33 +89,16 @@ export class EASService implements IEASService {
       });
 
       const receipt = await transaction.wait();
-      console.log('New Developer Attestation UID:', receipt);
-
-            // Check the transaction receipt for payment events
-            const paymentMade = this.isPaymentMade(receipt);
-
-            if (paymentMade) {
-              // Trigger sendInvoice if payment is made
-              await this.sendInvoice();
-            }
+      console.log('Transaction receipt:', transaction.receipt);
       
             return receipt;
 
-      console.log('Transaction receipt:', transaction.receipt);
+
 
     } catch (error) {
       console.log(error);
       throw error;
     } 
   }
-  private isPaymentMade(receipt): boolean {
-    // Logic to determine if the payment was made
-    // For example, you can check for specific event logs in the receipt
-    const paymentEvent = receipt.logs.find(log => log.event === 'PaymentMade');
-    return !!paymentEvent;
-  }
-  
-  private sendInvoice():string {
-    return ""
-  }
+
 }

@@ -1,70 +1,91 @@
 export const twoFACodeTemplate = (CODE: string) => {
     return `
           <!DOCTYPE html>
-  <html>
+  <html lang="en">
   <head>
-      <meta charset="utf-8">
-      <title>Two-Factor Authentication Code</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Your Verification Code</title>
+      <style>
+          body {
+              font-family: 'Roboto', sans-serif;
+              background-color: #e0e0e0;
+              margin: 0;
+              padding: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+          }
+          .container {
+              width: 100%;
+              max-width: 600px;
+              background-color: #ffffff;
+              border-radius: 10px;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+              overflow: hidden;
+          }
+          .header {
+              background-color: #673ab7;
+              color: #ffffff;
+              padding: 20px;
+              text-align: center;
+              font-size: 26px;
+              font-weight: bold;
+          }
+          .content {
+              padding: 40px 20px;
+              text-align: center;
+              color: #444444;
+          }
+          .content h1 {
+              font-size: 24px;
+              margin-bottom: 20px;
+              color: #333333;
+          }
+          .content p {
+              font-size: 16px;
+              line-height: 1.6;
+              margin-bottom: 30px;
+              color: #666666;
+          }
+          .code {
+              display: inline-block;
+              background-color: #f5f5f5;
+              padding: 15px 30px;
+              font-size: 28px;
+              color: #673ab7;
+              letter-spacing: 5px;
+              border-radius: 5px;
+              margin-bottom: 30px;
+          }
+          .footer {
+              background-color: #f5f5f5;
+              padding: 20px;
+              text-align: center;
+              font-size: 14px;
+              color: #888888;
+          }
+      </style>
   </head>
-  <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+  <body>
   
-  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr>
-          <td align="center" style="padding: 50px 0 50px 0;">
-              <!-- Main Table -->
-              <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <tr>
-              <td align="center" style="padding: 40px 0 30px 0;">
-                  <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                      <rect width="54" height="54" fill="url(#pattern0)"/>
-                      <defs>
-                      <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-                          <use xlink:href="#image0_1_39" transform="scale(0.0116279)"/>
-                      </pattern>
-                      </defs>
-                  </svg>
-              </td>
-          </tr>
-                  <!-- Content Section -->
-                  <tr>
-                      <td align="center" style="padding: 40px 30px 40px 30px;">
-                          <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                              <tr>
-                                  <td style="color: #333333; font-size: 24px; padding-bottom: 10px; text-align: center;">
-                                      Two-Factor Authentication Code
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td style="padding: 20px 0 30px 0; color: #666666; font-size: 16px; line-height: 20px; text-align: center;">
-                                      Please enter the following code to verify your identity:
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td align="center" style="color: #3498db; font-size: 24px; padding: 20px 0;">
-                                      ${CODE}
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td style="padding-top: 30px; color: #777777; font-size: 14px; line-height: 20px; text-align: center;">
-                                      If you did not request this code, please ignore this email.
-                                  </td>
-                              </tr>
-                          </table>
-                      </td>a
-                  </tr>
-                  <!-- Footer Section -->
-                  <tr>
-                      <td bgcolor="#f4f4f4" align="center" style="padding: 30px 30px;">
-                          &copy; 2023 TrussdID. All rights reserved.
-                      </td>
-                  </tr>
-              </table>
-          </td>
-      </tr>
-  </table>
+  <div class="container">
+      <div class="header">
+          Security Verification
+      </div>
+      <div class="content">
+          <h1>Your Authentication Code</h1>
+          <p>To complete your sign-in, please enter the following code:</p>
+          <div class="code">${CODE}</div>
+          <p>If you did not request this code, please disregard this message.</p>
+      </div>
+      <div class="footer">
+          &copy; 2024 Dundill. All rights reserved.
+      </div>
+  </div>
   
   </body>
   </html>
       `;
-  };
-  
+};

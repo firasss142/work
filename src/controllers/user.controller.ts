@@ -38,7 +38,7 @@ import {
   
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
-    @ApiBearerAuth()
+    @ApiBearerAuth()    
     @Get(":id")
     @ApiParam({ name: "id", type: String, description: "ID of the user" })
     async getById(@Param("id") id: any) {
@@ -70,7 +70,7 @@ import {
     //     return newUser;
     //   } catch (error) {
     //     return { error: "Unable to create user" };
-    //   }
+    //   }  
     // }
   
     @ApiConsumes("multipart/form-data")
@@ -171,6 +171,8 @@ async nftExec(
     throw new Error("Failed to deploy NFT");
   }
 }
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Admin)
 @Post('create-contract-attestation')
   async createContractAttestation(
     @Body('threshold') threshold: number,
@@ -182,6 +184,8 @@ async nftExec(
     return { contractAttestationUid };
   }
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Developer)
   @Post('create-developer-attestation')
   async createDeveloperAttestation() {
     const contractAttestationUid = this.attestationUID;

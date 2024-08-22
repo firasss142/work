@@ -10,7 +10,6 @@ import { IBcryptService, IDataServices, User } from "../../core";
 import { MailerService } from "../../frameworks/mailer/mailer-services.service";
 import { resetTemplate } from "../../core/mailerTemplates/resetPassTemplate";
 import { twoFACodeTemplate } from "../../core/mailerTemplates/codeTemplate";
-import { FRONT_END_URL } from "../../configuration";
 
 @Injectable()
 export class LoginUseCase {
@@ -92,7 +91,7 @@ export class LoginUseCase {
     if (!user) throw new NotFoundException("User not found.");
 
     const resetToken = this.jwtService.generateToken({ userId: user.id }, "1h");
-    const resetPasswordLink = `${FRONT_END_URL}/pages/reset-password/${resetToken}`;
+    const resetPasswordLink = `/pages/reset-password/${resetToken}`;
     await this.mailerService.sendEmail(
       user.email,
       "reset-password",

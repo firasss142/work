@@ -257,7 +257,7 @@ import {
       try{
         const attestationDeveloperResponse = await this.easService.createDeveloperAttestation(attestationUID);
         console.log("Attestation Response : ",attestationDeveloperResponse);
-        
+        return attestationDeveloperResponse;
       }catch(error){
         console.log("Error to create EAS Developer Attestation : ", error);
         throw new Error("Faild to create EAS Developer Attestation");
