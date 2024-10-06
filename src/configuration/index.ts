@@ -1,10 +1,7 @@
 require("dotenv").config();
 
 export const DATA_BASE_CONFIGURATION = {
-  mongoConnectionString:
-    process.env.NODE_ENV === "dev"
-      ? (process.env.CLEAN_NEST_MONGO_CONNECTION_STRING as string)
-      : `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}/?tls=false&authSource=admin`,
+  mongoConnectionString: (process.env.CLEAN_NEST_MONGO_CONNECTION_STRING as string)
 };
 export const MAILER_HOST = process.env.MAILER_HOST;
 export const MAILER_PORT = process.env.MAILER_PORT;

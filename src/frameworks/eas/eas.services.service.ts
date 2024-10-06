@@ -11,7 +11,6 @@ import {
 import { HttpService } from "@nestjs/axios"; 
 import { HttpException, Injectable } from "@nestjs/common";
 import { EAS_CONTRACT_ADDRESS, PROVIDER, SIGNER, CONTRACT_SCHEMA_UID, DEVELOPER_SCHEMA_UID } from "src/configuration";
-
 export type StoreAttestationRequest = { filename: string; textJson: string };
 
 @Injectable()
@@ -23,7 +22,7 @@ export class EASService implements IEASService {
   constructor(private httpService: HttpService) {}
 
   // Step 1: Create Contract Attestation
-  async createContractAttestation(threshold: number, paymentAmountInETH: string): Promise<string> {
+  async createContractAttestation(threshold: number, paymentAmountInETH: string, developerAddress :string): Promise<string> {
     try {
       // Set up Ethereum provider and signer using credentials from configuration
       const provider = new ethers.JsonRpcProvider(this.provider);
@@ -34,12 +33,13 @@ export class EASService implements IEASService {
       await eas.connect(signer);
       
       // Encode the schema data with threshold and payment amount
-      const schemaEncoder = new SchemaEncoder("uint256 threshold, uint256 paymentAmount");
+      const schemaEncoder = new SchemaEncoder("uint256 threshold, uint256 paymentAmount, address developerAddress");
       const paymentAmountInWei = ethers.parseUnits(paymentAmountInETH, "ether");
 
       const encodedData = schemaEncoder.encodeData([
         { name: "threshold", value: threshold, type: "uint256" },
         { name: "paymentAmount", value: paymentAmountInWei, type: "uint256" },
+        { name: "developerAddress", value: developerAddress, type: "address"}
       ]);
 
       const transaction = await eas.attest({

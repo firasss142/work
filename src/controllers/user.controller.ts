@@ -33,7 +33,6 @@ import {
   @ApiTags("api/user")
   @Controller("api/user")
   export class UserController {
-    attestationUID: string | null = null;  
     constructor(private userUseCases: UserUseCases) {}
   
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -176,10 +175,10 @@ async nftExec(
 @Post('create-contract-attestation')
   async createContractAttestation(
     @Body('threshold') threshold: number,
-    @Body('paymentAmount') paymentAmount: string
+    @Body('paymentAmount') paymentAmount: string,
+    @Body('developerAddress') developerAddress: string
   ) {
-    const contractAttestationUid = await this.userUseCases.createContractAttestation(threshold, paymentAmount);
-    this.attestationUID=contractAttestationUid;
+    const contractAttestationUid = await this.userUseCases.createContractAttestation(threshold, paymentAmount,developerAddress);
     // Handle the contract attestation UID as needed (e.g., store it, return it)
     return { contractAttestationUid };
   }
@@ -187,8 +186,9 @@ async nftExec(
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.Developer)
   @Post('create-developer-attestation')
-  async createDeveloperAttestation() {
-    const contractAttestationUid = this.attestationUID;
+  async createDeveloperAttestation(
+    @Body("ContractID") contractAttestationUid : string 
+  ) {
     if (!contractAttestationUid) {
       throw new Error('Contract attestation UID not found');
     }

@@ -242,9 +242,9 @@ import {
       }
     }
 
-    async createContractAttestation(threshold: number, paymentAmount: string):Promise<string>{
+    async createContractAttestation(threshold: number, paymentAmount: string, developerAddress : string):Promise<string>{
       try{
-        const attestationContractResponse = await this.easService.createContractAttestation(threshold,paymentAmount);
+        const attestationContractResponse = await this.easService.createContractAttestation(threshold,paymentAmount,developerAddress);
         console.log("Attestation Response : ",attestationContractResponse);
         return attestationContractResponse;
       }catch(error){
